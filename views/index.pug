@@ -7,6 +7,7 @@ block content
         thead
             th Name
             th Description
+            th Image
             th Update
             th Delete
         tbody
@@ -15,6 +16,8 @@ block content
                 tr
                     td= article.name
                     td= article.description
+                    td
+                        img(src='/images/'+article.image)
                     td 
                         a(href='/update/'+article.id) Update
                     td

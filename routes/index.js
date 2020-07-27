@@ -2,6 +2,9 @@
 var express = require('express');
 var router = express.Router();
 var articlesModel = require('../models/articles');
+var formidable = require('formidable');
+var fs = require('fs');
+var path = require('path');
 /* GET home page. */
 router.get('/', function (req, res) {
     try {
@@ -25,12 +28,32 @@ router.get('/insert', function (req, res) {
 
 /* POST insert page */
 router.post('/insert', function (req, res) {
-    //Create a new article using the Articles Model Schema
-    const article = new articlesModel({ name: req.body.name, description: req.body.description });
-    //Insert article into DB
-    article.save(function (err) {
+    var form = new formidable.IncomingForm();
+    //Specify our image file directory
+    form.uploadDir = path.join(__dirname, '../public/images');
+    form.parse(req, function (err, fields, files) {
+        console.log('Parsed form.');
+        //Update filename
+        files.image.name = fields.name + '.' + files.image.name.split('.')[1];
+        //Create a new article using the Articles Model Schema
+        const article = new articlesModel({ name: fields.name, description: fields.description, image: files.image.name });
+        //Insert article into DB
+        article.save(function (err) {
+            console.log(err);
+        });
+        //Upload file on our server
+        fs.rename(files.image.path, path.join(form.uploadDir, files.image.name), function (err) {
+            if (err) console.log(err);
+        });
+        console.log('Received upload');
+    });
+    form.on('error', function (err) {
         console.log(err);
-        res.redirect('/');
+    });
+    form.on('end', function (err, fields, files) {
+        console.log('File successfuly uploaded');
+        //res.end('File successfuly uploaded');
+        res.send({ "success": "We have received your message, please wait a day for a response." });
     });
 });
 

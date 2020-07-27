@@ -10,7 +10,7 @@ var bodyParser = require('body-parser');
 
 const MongoClient = require('mongodb').MongoClient;
 var mongoose = require('mongoose');
-const uri = "mongodb+srv://root:123@cluster0-bzmj5.mongodb.net/test?retryWrites=true&w=majority";
+const uri = "mongodb+srv://jacob:123@cluster0-fvne7.mongodb.net/test?retryWrites=true&w=majority";
 try {
     mongoose.connect(uri, { useNewUrlParser: true });
     var db = mongoose.connection;

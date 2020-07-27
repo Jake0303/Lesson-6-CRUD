@@ -10,6 +10,9 @@ const ArticleSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
+    },
+    image: {
+        type: String
     }
 });
 //Create and instantiate model with schema
